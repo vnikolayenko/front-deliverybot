@@ -2,10 +2,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "app.fullname" . }}-migrate
+  name: {{ include "front.fullname" . }}-migrate
   namespace: {{ .Release.Namespace }}
   labels:
-{{ include "app.labels" . | indent 4 }}
+{{ include "front.labels" . | indent 4 }}
   annotations:
     "helm.sh/hook": pre-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation
@@ -15,13 +15,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/component: migrate
-{{ include "app.matchLabels" . | indent 8 }}
+{{ include "front.matchLabels" . | indent 8 }}
     spec:
       restartPolicy: Never
-    {{- with .Values.imagePullSecrets }}
+      #    {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+        - name: awsecr-cred
+              # {{- toYaml . | nindent 8 }}
+              #    {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           command: ["/bin/sh"]
@@ -30,7 +31,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
             - secretRef:
-                name: {{ include "app.fullname" $ }}
+                name: {{ include "front.fullname" $ }}
         {{ with .Values.env }}
           env:
             {{- toYaml . | nindent 12 }}

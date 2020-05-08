@@ -17,6 +17,7 @@ jobs:
         token: '${{ github.token }}'
         secrets: '${{ toJSON(secrets) }}'
         version: '${{ github.sha }}'
-        chart: './charts/app'
+        chart: './charts/front'
+        namespace: 'default'
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'

@@ -1,37 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "app.fullname" . }}
+  name: {{ include "front.fullname" . }}
   namespace: {{ .Release.Namespace }}
+  #namespace: default
   annotations:
     "deliverybot.dev/secret-checksum": {{ toJson .Values.secrets | sha256sum }}
   labels:
-{{ include "app.labels" . | indent 4 }}
+{{ include "front.labels" . | indent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-{{ include "app.matchLabels" . | indent 6 }}
+{{ include "front.matchLabels" . | indent 6 }}
   template:
     metadata:
       labels:
-{{ include "app.matchLabels" . | indent 8 }}
+{{ include "front.matchLabels" . | indent 8 }}
     spec:
-    {{- with .Values.imagePullSecrets }}
+            #{{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+      - name: awsecr-cred      
+              #{{- toYaml . | nindent 8 }}
+              #{{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
             - secretRef:
-                name: {{ include "app.fullname" . }}
+                name: {{ include "front.fullname" . }}
         {{ with .Values.env }}
           env:
-            {{- toYaml . | nindent 12 }}
-        {{- end }}
+                  # {{- toYaml . | nindent 12 }}
+                  #{{- end }}
+            - name: "URL_GET"
+              value: {{ .Values.URL_GET }}
+            - name: "URL_POST"
+              value: {{ .Values.URL_POST }}
           ports:
             - name: http
               containerPort: {{ .Values.service.internalPort }}

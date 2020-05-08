@@ -9,29 +9,30 @@ app:
 
 image:
   # image.repository -- Docker image repository.
-  repository: nginx
+  repository: 074368059797.dkr.ecr.eu-central-1.amazonaws.com/front
   # image.tag -- Docker image tag.
-  tag: latest
-  pullPolicy: IfNotPresent
+  tag: 840d0cb04126efc7ecb57df84d51e828e68d91d1
+  pullPolicy: Always
 
 # imagePullSecrets -- Defines secrets to use for pulling docker images.
-imagePullSecrets: []
+# imagePullSecrets: []
 
 service:
   # service.enabled -- Enable service resource.
   enabled: true
   # service.type -- Kubernetes service type.
-  type: ClusterIP
+  type: NodePort
   # service.port -- Kubernetes service port.
   port: 80
   # service.internalPort -- Deployment internal port.
-  internalPort: 80
+  internalPort: 8080
 
 ingress:
   # ingress.enabled -- Enable ingress resource.
   enabled: true
   # ingress.annotations -- Configures annotations for the ingress.
   annotations: {}
+    kubernetes.io/ingress.class: traefik
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -46,6 +47,8 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+URL_GET: http://get-srv:8081
+URL_POST: http://post-srv:8082/a
 # resources -- Kubernetes resources for Deployment resources.
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

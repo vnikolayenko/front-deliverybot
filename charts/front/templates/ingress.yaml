@@ -1,12 +1,12 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "app.fullname" . -}}
+{{- $fullName := include "front.fullname" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   namespace: {{ .Release.Namespace }}
   labels:
-{{ include "app.labels" . | indent 4 }}
+{{ include "front.labels" . | indent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -31,7 +31,7 @@ spec:
           - path: {{ . }}
             backend:
               serviceName: {{ $fullName }}
-              servicePort: http
+              servicePort: {{ .Values.service.port }}
         {{- end }}
   {{- end }}
 {{- end }}

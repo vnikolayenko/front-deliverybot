@@ -1,5 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "front.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -31,7 +32,7 @@ spec:
           - path: {{ . }}
             backend:
               serviceName: {{ $fullName }}
-              servicePort: {{ .Values.service.port }}
+              servicePort: {{ $svcPort }}
         {{- end }}
   {{- end }}
 {{- end }}

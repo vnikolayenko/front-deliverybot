@@ -31,8 +31,9 @@ ingress:
   # ingress.enabled -- Enable ingress resource.
   enabled: true
   # ingress.annotations -- Configures annotations for the ingress.
-  annotations: {}
+  annotations: {
     kubernetes.io/ingress.class: traefik
+    }
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:

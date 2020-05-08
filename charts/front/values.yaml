@@ -21,7 +21,7 @@ service:
   # service.enabled -- Enable service resource.
   enabled: true
   # service.type -- Kubernetes service type.
-  type: NodePort
+  type: ClusterIP
   # service.port -- Kubernetes service port.
   port: 80
   # service.internalPort -- Deployment internal port.
